@@ -1,0 +1,12 @@
+* {
+    font-style: normal;
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 1px, 1px, black;
+}
+
+button {
+    background-color: green;
+    color: honeydew;
+    border-radius: 10px;
+}
+    
