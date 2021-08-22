@@ -4,6 +4,7 @@ var choicesEl = document.querySelector("#choices")
 var answerEl = document.querySelector("#answer")
 var timerEl = document.querySelector("#timer")
 var quizEl = document.querySelector("#quiz")
+var viewHighScore = document.querySelector("#highScores")
 var timer = 75
 var i = 0
 var userChoice = ""
@@ -34,7 +35,6 @@ var timedQuiz = function(){
     };
     gameFlow();
 }
-
 
 var questionFlow = function(userChoice){
 
@@ -111,19 +111,25 @@ var questionFlow = function(userChoice){
 
 var checkAnswer = function(userChoice){
     if (userChoice === qAC[i].c){
-        console.log('Correct')
+        answerEl.innerHTML = "CORRECT"
         i++
         addDivEl.remove()
+        setTimeout(function(){
+            answerEl.innerHTML = ""
+        }, 1000)
         if (i !== qAC.length){
             questionFlow()
         }
         
     }
     else {
-        console.log('Wrong')
+        answerEl.innerHTML = "WRONG"
         i++
         timer = timer - 20
         addDivEl.remove()
+        setTimeout(function(){
+            answerEl.innerHTML = ""
+        }, 1000)
         if (i !== qAC.length){
             questionFlow()
         }
@@ -168,14 +174,12 @@ var endGame = function() {
             {initials: initialsInput,
             score: userScore
             }
-        ]        
-        localStorage.setItem("highScore", JSON.stringify(highScore))
+        ]
+    localStorage.setItem("highScore", JSON.stringify(highScore))
     }
+
 }
 
-// var saveScores = function(){
-//     console.log(initialsInput && userScore)
-// }
 
 
 // Listen for click of user to Start
