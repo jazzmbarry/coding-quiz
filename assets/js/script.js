@@ -7,6 +7,7 @@ var quizEl = document.querySelector("#quiz")
 var timer = 75
 var i = 0
 var userChoice = ""
+var userScore
 var qAC = [
     {q: "JavaScript has a file extension of ____", a: {a:".java", b:".js", c:".xml", d:".javascript"}, c: 'b'},
     {q: "Inside which HTML element do we put JavaScript?", a: {a:"scripting", b:"script", c:"JavaScript", d:"js"}, c: "b"},
@@ -20,7 +21,7 @@ var timedQuiz = function(){
         // console.log(timer)
         timer--;
         timerEl.innerHTML = timer
-        if (timer === 0){
+        if (timer === 0 || i === qAC.length){
             clearInterval(gameFlow)
             endGame();
         }
@@ -38,9 +39,6 @@ var timedQuiz = function(){
 
 var questionFlow = function(userChoice){
 
-    if (i === qAC.length){
-        endGame();
-    }
     // Place question to be answered
     questionsEl.textContent = qAC[i].q
 
@@ -137,7 +135,22 @@ var checkAnswer = function(userChoice){
 }
 
 var endGame = function() {
+    userScore = timer
 
+    // Use 'question to be answered' to show score
+    questionsEl.textContent = "Your score is " + userScore
+
+    //Create Div for Answers to be used for replay
+    var addDiv = document.createElement('div')
+    addDiv.setAttribute("id", 'choices')
+    quizEl.appendChild(addDiv)
+    addDivEl = document.querySelector("#choices")
+
+    // Create answer
+    var choiceA = document.createElement('button')
+    choiceA.setAttribute('id', 'choiceA')
+    choiceA.innerHTML = "Replay?"
+    addDiv.appendChild(choiceA)
 }
 
 
