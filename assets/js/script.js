@@ -6,6 +6,7 @@ var timerEl = document.querySelector("#timer")
 var quizEl = document.querySelector("#quiz")
 var timer = 75
 var i = 0
+var userChoice = ""
 var qAC = [
     {q: "JavaScript has a file extension of ____", a: {a:".java", b:".js", c:".xml", d:".javascript"}, c: 'b'},
     {q: "Inside which HTML element do we put JavaScript?", a: {a:"scripting", b:"script", c:"JavaScript", d:"js"}, c: "b"},
@@ -22,7 +23,7 @@ var timedQuiz = function(){
         if (timer === 0){
             clearInterval(gameFlow)
         }
-        else if (timer === 75) {
+        else {
             gameFlow();
         }
     
@@ -34,49 +35,110 @@ var timedQuiz = function(){
 }
 
 
-var questionFlow = function(choiceAEl, choiceBEl, choiceCEl, choiceDEl){
-    var userInput = ""
+var questionFlow = function(userChoice){
 
-        //Create Div for Answers
-        var addDiv = document.createElement('div')
-        addDiv.setAttribute("id", 'choices')
-        quizEl.appendChild(addDiv)
+    if (i === qAC.length){
+        endGame();
+    }
+    // Place question to be answered
+    questionsEl.textContent = qAC[i].q
 
-        // Place question to be answered
-        questionsEl.textContent = qAC[i].q
+    //Create Div for Answers
+    var addDiv = document.createElement('div')
+    addDiv.setAttribute("id", 'choices')
+    quizEl.appendChild(addDiv)
+    addDivEl = document.querySelector("#choices")
 
-        // Create answer buttons
-        var choiceA = document.createElement('button')
-        choiceA.setAttribute('id', 'choices')
-        choiceA.innerHTML = qAC[i].a.a
-        console.log(choiceA.textContent)
-        addDiv.appendChild(choiceA)
-        var choiceB = document.createElement('button')
-        choiceB.setAttribute('id', 'choices')
-        choiceB.innerHTML = qAC[i].a.b
-        console.log(choiceB.textContent)
-        addDiv.appendChild(choiceB)
-        var choiceC = document.createElement('button')
-        choiceC.setAttribute('id', 'choices')
-        choiceC.innerHTML = qAC[i].a.c
-        console.log(choiceC.textContent)
-        addDiv.appendChild(choiceC)
-        var choiceD = document.createElement('button')
-        choiceD.setAttribute('id', 'choices')
-        choiceD.innerHTML = qAC[i].a.d
-        console.log(choiceD.textContent)
-        addDiv.appendChild(choiceD)
-        
-        //Increase i
-        console.log(i)
-        i++;
-        console.log(i)
+    // Create answer
+    var choiceA = document.createElement('button')
+    choiceA.setAttribute('id', 'choiceA')
+    choiceA.innerHTML = qAC[i].a.a
+    addDiv.appendChild(choiceA)
 
-        
+    // Create answer
+    var choiceB = document.createElement('button')
+    choiceB.setAttribute('id', 'choiceB')
+    choiceB.innerHTML = qAC[i].a.b
+    addDiv.appendChild(choiceB)
+
+
+    // Create answer
+    var choiceC = document.createElement('button')
+    choiceC.setAttribute('id', 'choiceC')
+    choiceC.innerHTML = qAC[i].a.c
+    addDiv.appendChild(choiceC)
+
+    // Create answer
+    var choiceD = document.createElement('button')
+    choiceD.setAttribute('id', 'choiceD')
+    choiceD.innerHTML = qAC[i].a.d
+    addDiv.appendChild(choiceD)
+
+    // Set DOM QuerySelectors for new buttons
+    var choiceAEl = document.getElementById('choiceA')
+    var choiceBEl = document.getElementById('choiceB')
+    var choiceCEl = document.getElementById('choiceC')
+    var choiceDEl = document.getElementById('choiceD')
+    
+    
+    console.log(choiceA.textContent)
+    console.log(choiceB.textContent)
+    console.log(choiceC.textContent)
+    console.log(choiceD.textContent)
+    
+    //Increase i
+    console.log(i)
+    i++;
+    console.log(i)
+
+    // Listen for clicks of eack DOM Element
+    choiceAEl.onclick = function(){
+        console.log(this)
+        userChoice = "a"
+        console.log(userChoice)
+        checkAnswer(userChoice)
+        return userChoice
+    }
+    choiceBEl.onclick = function(){
+        console.log(this)
+        userChoice = "b"            
+        console.log(userChoice)
+        checkAnswer(userChoice)
+        return userChoice
+    }
+    choiceCEl.onclick = function(){
+        console.log(this)
+        userChoice = "c"
+        console.log(userChoice)
+        checkAnswer(userChoice)
+        return userChoice
+    }
+    choiceDEl.onclick = function(){
+        console.log(this)
+        userChoice = "d"
+        console.log(userChoice)
+        checkAnswer(userChoice)
+        return userChoice
     }
 
+}
 
-// Listen for click of user
+var checkAnswer = function(userChoice){
+    if (userChoice === qAC[i].c){
+        console.log('Correct')
+        addDivEl.remove()
+        questionFlow()
+    }
+    else {
+        console.log('Wrong')
+        timer - 20
+        addDivEl.remove()
+        questionFlow()
+    }
+}
+
+
+// Listen for click of user to Start
 choicesEl.addEventListener("click", function() {
     this.remove()       
     timedQuiz()
