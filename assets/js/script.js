@@ -7,7 +7,6 @@ var quizEl = document.querySelector("#quiz")
 var timer = 75
 var i = 0
 var userChoice = ""
-var userScore
 var qAC = [
     {q: "JavaScript has a file extension of ____", a: {a:".java", b:".js", c:".xml", d:".javascript"}, c: 'b'},
     {q: "Inside which HTML element do we put JavaScript?", a: {a:"scripting", b:"script", c:"JavaScript", d:"js"}, c: "b"},
@@ -22,7 +21,7 @@ var timedQuiz = function(){
         timer--;
         timerEl.innerHTML = timer
         if (timer === 0 || i === qAC.length){
-            clearInterval(gameFlow)
+            clearInterval(gameFlow)         
             endGame();
         }
         else {
@@ -77,16 +76,9 @@ var questionFlow = function(userChoice){
     var choiceAEl = document.getElementById('choiceA')
     var choiceBEl = document.getElementById('choiceB')
     var choiceCEl = document.getElementById('choiceC')
-    var choiceDEl = document.getElementById('choiceD')
-    
-    
-    console.log(choiceA.textContent)
-    console.log(choiceB.textContent)
-    console.log(choiceC.textContent)
-    console.log(choiceD.textContent)
-    
+    var choiceDEl = document.getElementById('choiceD')    
 
-    // Listen for clicks of eack DOM Element
+    // Listen for clicks of each DOM Element
     choiceAEl.onclick = function(){
         console.log(this)
         userChoice = "a"
@@ -115,7 +107,6 @@ var questionFlow = function(userChoice){
         checkAnswer(userChoice)
         return userChoice
     }
-
 }
 
 var checkAnswer = function(userChoice){
@@ -123,42 +114,75 @@ var checkAnswer = function(userChoice){
         console.log('Correct')
         i++
         addDivEl.remove()
-        questionFlow()
+        if (i !== qAC.length){
+            questionFlow()
+        }
+        
     }
     else {
         console.log('Wrong')
         i++
         timer = timer - 20
         addDivEl.remove()
-        questionFlow()
+        if (i !== qAC.length){
+            questionFlow()
+        }
     }
 }
 
 var endGame = function() {
-    userScore = timer
+    window.userScore = timer
+    if (userScore < 0){
+        userScore = 0
+    }
 
     // Use 'question to be answered' to show score
     questionsEl.textContent = "Your score is " + userScore
 
-    //Create Div for Answers to be used for replay
-    var addDiv = document.createElement('div')
-    addDiv.setAttribute("id", 'choices')
+    //Create form to be used for Initials container
+    var addDiv = document.createElement('form')
+    addDiv.setAttribute("id", 'scores')
+    addDiv.innerHTML = "Enter your Initials  "
     quizEl.appendChild(addDiv)
     addDivEl = document.querySelector("#choices")
 
-    // Create answer
-    var choiceA = document.createElement('button')
-    choiceA.setAttribute('id', 'choiceA')
-    choiceA.innerHTML = "Replay?"
+    // Create input to be used for form
+    var choiceA = document.createElement('input')
+    choiceA.setAttribute('id', 'initials')
+    choiceA.setAttribute('placeholder', "Your Initials Here")
     addDiv.appendChild(choiceA)
+    
+    // Submit Button 
+    var submit = document.createElement('button')
+    submit.setAttribute('id', 'submit')
+    submit.setAttribute('type', 'submit')
+    submit.innerHTML = "Submit & Retry"
+    addDiv.appendChild(submit)
+    
+    // DOM Element for Submit Button
+    var submitEl = document.getElementById('submit')
+
+    submitEl.onclick = function(){
+        window.initialsInput = document.getElementById('initials').value
+        var highScore = [
+            {initials: initialsInput,
+            score: userScore
+            }
+        ]        
+        localStorage.setItem("highScore", JSON.stringify(highScore))
+    }
 }
+
+// var saveScores = function(){
+//     console.log(initialsInput && userScore)
+// }
 
 
 // Listen for click of user to Start
-choicesEl.addEventListener("click", function() {
+choicesEl.addEventListener("click", function(event) {
+    event.preventDefault();
     this.remove()       
     timedQuiz()
     questionFlow();
 })
-
 
