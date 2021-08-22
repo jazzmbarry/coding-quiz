@@ -17,11 +17,12 @@ var qAC = [
 
 var timedQuiz = function(){
     var countdown = function(){
-        console.log(timer)
+        // console.log(timer)
         timer--;
         timerEl.innerHTML = timer
         if (timer === 0){
             clearInterval(gameFlow)
+            endGame();
         }
         else {
             gameFlow();
@@ -86,10 +87,6 @@ var questionFlow = function(userChoice){
     console.log(choiceC.textContent)
     console.log(choiceD.textContent)
     
-    //Increase i
-    console.log(i)
-    i++;
-    console.log(i)
 
     // Listen for clicks of eack DOM Element
     choiceAEl.onclick = function(){
@@ -126,15 +123,21 @@ var questionFlow = function(userChoice){
 var checkAnswer = function(userChoice){
     if (userChoice === qAC[i].c){
         console.log('Correct')
+        i++
         addDivEl.remove()
         questionFlow()
     }
     else {
         console.log('Wrong')
-        timer - 20
+        i++
+        timer = timer - 20
         addDivEl.remove()
         questionFlow()
     }
+}
+
+var endGame = function() {
+
 }
 
 
