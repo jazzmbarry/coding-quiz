@@ -3,8 +3,11 @@ var questionsEl = document.querySelector("#questions")
 var choicesEl = document.querySelector("#choices")
 var answerEl = document.querySelector("#answer")
 var timerEl = document.querySelector("#timer")
+var timerLineEl = document.querySelector('#timerLine')
 var quizEl = document.querySelector("#quiz")
-var viewHighScore = document.querySelector("#highScores")
+var viewHighScoreEl = document.querySelector("#highScores")
+var highScoreButtonEl = document.querySelector('#highScoreButton')
+var bodyEl = document.getElementById('body')
 var timer = 75
 var i = 0
 var userChoice = ""
@@ -137,7 +140,7 @@ var checkAnswer = function(userChoice){
 }
 
 var endGame = function() {
-    window.userScore = timer
+    var userScore = timer
     if (userScore < 0){
         userScore = 0
     }
@@ -169,7 +172,7 @@ var endGame = function() {
     var submitEl = document.getElementById('submit')
 
     submitEl.onclick = function(){
-        window.initialsInput = document.getElementById('initials').value
+        var initialsInput = document.getElementById('initials').value
         var highScore = [
             {initials: initialsInput,
             score: userScore
@@ -177,9 +180,7 @@ var endGame = function() {
         ]
     localStorage.setItem("highScore", JSON.stringify(highScore))
     }
-
 }
-
 
 
 // Listen for click of user to Start
@@ -190,3 +191,39 @@ choicesEl.addEventListener("click", function(event) {
     questionFlow();
 })
 
+viewHighScoreEl.addEventListener("click", function(event) {
+    event.preventDefault();
+    answerEl.remove();
+    timerEl.remove();
+    timerLineEl.remove();
+    choicesEl.remove();
+
+    var highScore = localStorage.getItem("highScore")
+    var parseHighScore = JSON.parse(highScore) 
+    if (parseHighScore === "" || parseHighScore === null || parseHighScore === "" || parseHighScore === null){
+        questionsEl.textContent = "There is no High Score"
+    }
+    else {
+        questionsEl.textContent = parseHighScore[0].initials + " has a score of " + parseHighScore[0].score
+    }
+    highScoreButtonEl.textContent = "Go Back"
+    
+    // create Erase high score button
+    var erase = document.createElement('button')
+    erase.setAttribute('id', 'erase')
+    erase.innerHTML = "Erase High Score"
+    bodyEl.appendChild(erase)
+
+    var eraseEl = document.querySelector('#erase')
+
+    
+    
+    highScoreButtonEl.onclick = function(){
+        location.reload();
+    }
+
+    eraseEl.onclick = function(){
+        localStorage.clear();
+        questionsEl.textContent = "There is no High Score"
+    }
+})
